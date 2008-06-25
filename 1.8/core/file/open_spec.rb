@@ -10,7 +10,9 @@ describe "File.open" do
   before :each do
     @fh = @fd = nil
     @flags = File::CREAT | File::TRUNC | File::WRONLY
+    puts "@file == #{@file} class = #{@file.class}"
     File.open(@file, "w") {} # touch
+    puts 'here'
   end
 
   after :each do

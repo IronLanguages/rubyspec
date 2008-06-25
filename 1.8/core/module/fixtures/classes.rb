@@ -293,4 +293,6 @@ module AutoLoadSubject
   def self.message; "failure"; end
 end
 
-autoload :ModuleSpecAutoloadToplevel, File.join(File.dirname(__FILE__), "autoload_toplevel.rb")
+# HACK: workaround missing autoload feature
+#autoload :ModuleSpecAutoloadToplevel, File.join(File.dirname(__FILE__), "autoload_toplevel.rb")
+require File.join(File.dirname(__FILE__), "autoload_toplevel.rb")

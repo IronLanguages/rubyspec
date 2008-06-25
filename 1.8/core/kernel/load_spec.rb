@@ -33,9 +33,10 @@ describe "Kernel#load" do
 
   # Avoid storing .rbc in repo
   before :all do
-    Dir.chdir($load_fixture_dir) do |dir|
-      `rm -f ./*.rbc`
-    end
+    # HACK: commenting out this code since we don't support backtick right now    
+    #Dir.chdir($load_fixture_dir) do |dir|
+    #  `rm -f ./*.rbc`
+    #end
   end
 
   it "loads a .rb from an absolute path and returns true" do
