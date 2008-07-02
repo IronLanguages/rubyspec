@@ -10,6 +10,17 @@ shared :stringio_each_byte do |cmd|
       seen.should == [120, 121, 122]
     end
 
+    it "updates the position before each yield" do
+      seen = []
+      @io.send(cmd) { |b| seen << @io.pos }
+      seen.should == [1, 2, 3]
+    end
+
+    it "does not yield anything if the current position is out of bounds" do
+      @io.pos = 1000
+      @io.send(cmd) { |b| fail("should not yield") }
+    end
+
     ruby_version_is "" ... "1.8.7" do
       it "returns nil" do
         @io.send(cmd) {}.should be_nil
