@@ -33,7 +33,7 @@ shared :array_replace do |cmd|
       [].send(cmd, ArraySpecs::ToAryArray[5, 6, 7]).should == [5, 6, 7]
     end
 
-    compliant_on :ruby, :jruby do
+    compliant_on :ruby, :jruby, :ir do
       it "raises a TypeError on a frozen array" do
         lambda { ArraySpecs.frozen_array.send(cmd, ArraySpecs.frozen_array) }.should raise_error(TypeError)
       end
