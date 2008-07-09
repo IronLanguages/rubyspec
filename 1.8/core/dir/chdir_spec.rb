@@ -11,11 +11,13 @@ describe "Dir.chdir" do
   end
   
   it "defaults to $HOME with no arguments" do
-    Dir.chdir(ENV['HOME'])
-    home = Dir.pwd
+    if ENV['HOME']
+      Dir.chdir(ENV['HOME'])
+      home = Dir.pwd
 
-    Dir.chdir
-    Dir.pwd.should == home
+      Dir.chdir
+      Dir.pwd.should == home
+    end
   end
   
   it "changes to the specified directory" do

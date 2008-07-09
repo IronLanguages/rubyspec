@@ -191,14 +191,14 @@ shared :dir_glob do |cmd|
     end
 
     it "matches special characters by escaping with a backslash with '\\<character>'" do
-      Dir.mkdir 'foo*bar'
+      Dir.mkdir 'foo^bar'
 
       begin
-        Dir.glob('foo?bar').should == %w|foo*bar|
-        Dir.glob('foo\?bar').should == []
-        Dir.glob('nond\otfile').should == %w|nondotfile|
+        Dir.send(cmd, 'foo?bar').should == %w|foo^bar|
+        Dir.send(cmd, 'foo\?bar').should == []
+        Dir.send(cmd, 'nond\otfile').should == %w|nondotfile|
       ensure
-        Dir.rmdir 'foo*bar'
+        Dir.rmdir 'foo^bar'
       end
     end
 
