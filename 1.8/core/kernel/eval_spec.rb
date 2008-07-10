@@ -140,6 +140,11 @@ describe "Kernel#eval" do
       e.message.should =~ /^#{expected}:1:.+/
     }
   end
+
+  it "should perform top level evaluations from inside a block" do
+    [1].each { eval "Const = 1"}
+    Const.should ==1
+  end
 end
 
 describe "Kernel.eval" do

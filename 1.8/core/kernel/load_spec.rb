@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
+require 'fileutils'
 
 $load_fixture_dir = (File.dirname(__FILE__) + '/../../fixtures/load')
 $LOAD_PATH << $load_fixture_dir
@@ -33,10 +34,9 @@ describe "Kernel#load" do
 
   # Avoid storing .rbc in repo
   before :all do
-    # HACK: commenting out this code since we don't support backtick right now    
-    #Dir.chdir($load_fixture_dir) do |dir|
-    #  `rm -f ./*.rbc`
-    #end
+    Dir.chdir($load_fixture_dir) do |dir|
+      FileUtils.rm_f(Dir["*.rbc"])
+    end
   end
 
   it "loads a .rb from an absolute path and returns true" do
