@@ -8,19 +8,32 @@ describe "Kernel#`" do
   
   it "returns the standard output of the executed sub-process" do
     ip = 'world'
-    `echo disc #{ip}`.should == "disc world\n"
+    platform_is_not :windows do
+      `echo disc #{ip}`.should == "disc world\n"
+    end
+    platform_is :windows do
+      `echo disc #{ip}`.should == "disc world\r\n"
+    end
   end
   
   it "tries to convert the given argument to String using #to_str" do
     (obj = mock('echo test')).should_receive(:to_str).and_return("echo test")
-    Kernel.`(obj).should == "test\n"
+    if platform_is_not :windows
+      Kernel.`(obj).should == "test\n"
+    else
+      Kernel.`(obj).should == "test\r\n"
+    end
   end
 
   it "checks whether the passed argument responds to #to_str" do
     obj = mock('echo another test')
     obj.should_receive(:respond_to?).with(:to_str).any_number_of_times.and_return(true)
     obj.should_receive(:method_missing).with(:to_str).and_return("echo another test")
-    Kernel.`(obj).should == "another test\n"
+    if platform_is_not :windows
+      Kernel.`(obj).should == "another test\n"
+    else
+      Kernel.`(obj).should == "another test\r\n"
+    end
   end
   
   platform_is_not :windows do

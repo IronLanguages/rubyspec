@@ -7,11 +7,13 @@ shared :thread_exit do |cmd|
     # sent #join from outside the thread. The 100.times provides a certain
     # probability that the deadlock will occur. It was sufficient to reliably
     # reproduce the deadlock in JRuby.
-    it "does not deadlock when called from within the thread while being joined from without" do
-      100.times do
-        t = Thread.new { Thread.stop; Thread.current.send(cmd) }
-        Thread.pass until t.status == "sleep"
-        t.wakeup; t.join
+    ironruby_bug("bug 21157: Match MRI sleep / wakeup / run semantics in IronRuby") do
+      it "does not deadlock when called from within the thread while being joined from without" do
+        100.times do
+          t = Thread.new { Thread.stop; Thread.current.send(cmd) }
+          Thread.pass until t.status == "sleep"
+          t.wakeup; t.join
+        end
       end
     end
   end

@@ -7,7 +7,11 @@ describe "Kernel#system" do
       result = false
 
       File.exist?("happy").should == false
-      result = system("touch happy")
+      if platform_is_not :windows
+        result = system("touch happy") 
+      else
+        result = system("echo 'a' > happy")
+      end
       result.should == true
       File.exist?("happy").should == true
     ensure
