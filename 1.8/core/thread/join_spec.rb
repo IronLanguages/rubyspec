@@ -35,8 +35,10 @@ describe "Thread#join" do
     t.join.should == t
   end
   
-  it "raises any exceptions encountered in the thread body" do
-    t = Thread.new { raise NotImplementedError.new("Just kidding") }
-    lambda { t.join }.should raise_error(NotImplementedError)
+  ironruby_bug("21171: Marshal exceptions thrown within thread blocks properly to calling thread") do
+    it "raises any exceptions encountered in the thread body" do
+      t = Thread.new { raise NotImplementedError.new("Just kidding") }
+      lambda { t.join }.should raise_error(NotImplementedError)
+    end
   end
 end
