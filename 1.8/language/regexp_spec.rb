@@ -17,7 +17,7 @@ describe "Literal Regexps" do
     (/fo#{str}/ =~ "foo").should == 0
   end
 
-  it "allow substitutionof literal regexps" do
+  it "allow substitution of literal regexps" do
     str = /o?$/
     (/fo#{str}/ =~ "foo?").should == nil
     (/fo#{str}/ =~ "foo").should == 0

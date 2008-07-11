@@ -22,7 +22,8 @@ describe "Integer#upto [stop] when self and stop are Fixnums" do
   it "yields while increasing self until it is greater than floor of a Float endpoint" do
     result = []
     9.upto(13.3) {|i| result << i}
-    result.should == [9,10,11,12,13] 
+    -5.upto(-1.3) {|i| result << i}
+    result.should == [9,10,11,12,13,-5,-4,-3,-2] 
   end 
 
   it "raises an ArgumentError for non-numeric endpoints" do

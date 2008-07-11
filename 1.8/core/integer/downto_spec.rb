@@ -19,10 +19,11 @@ describe "Integer#downto [stop] when self and stop are Fixnums" do
     result.should == [5, 4, 3, 2]
   end
 
-  it "yields while decreaing self until it less than ceil for a Float endpoint" do
+  it "yields while decreasing self until it less than ceil for a Float endpoint" do
     result = []
     9.downto(1.3) {|i| result << i}
-    result.should == [9, 8, 7, 6, 5, 4, 3, 2]
+    3.downto(-1.3) {|i| result << i}
+    result.should == [9, 8, 7, 6, 5, 4, 3, 2, 3, 2, 1, 0, -1]
   end
 
   it "raises a ArgumentError for invalid endpoints" do

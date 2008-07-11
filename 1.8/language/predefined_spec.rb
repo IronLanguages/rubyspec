@@ -324,7 +324,7 @@ describe "Execution variable $:" do
     ($:.length > 0).should == true
   end
 
-  it "includes the curret directory" do
+  it "includes the current directory" do
     $:.should include(".")
   end
 
@@ -494,10 +494,8 @@ describe "The predefined global constants" do
   it "includes TOPLEVEL_BINDING" do
     Object.const_defined?(:TOPLEVEL_BINDING).should == true
   end
+
   it "includes RUBY_ENGINE" do
     Object.const_defined?(:RUBY_ENGINE).should == true
-    compliant_on(:ir) do
-      RUBY_ENGINE.should == 'ironruby'
-    end
   end
 end
