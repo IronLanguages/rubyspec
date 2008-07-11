@@ -34,7 +34,7 @@ shared :array_equal do |cmd|
     end
 
     it "does not call to_ary on array subclasses" do
-      ([5, 6, 7] == ArraySpecs::ToAryArray[5, 6, 7]).should == true
+      ([5, 6, 7].send(cmd,ArraySpecs::ToAryArray[5, 6, 7])).should == true
     end
 
     it "ignores array class differences" do

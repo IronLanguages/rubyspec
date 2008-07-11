@@ -26,8 +26,7 @@ shared :array_indexes do |cmd|
     it "returns elements in range arguments as nested arrays (DEPRECATED)" do
       array = [1, 2, 3, 4, 5]
       params = [0..2, 1...3, 4..6]
-      array.indexes(*params).should == [[1, 2, 3], [2, 3], [5]]
-      array.indices(*params).should == [[1, 2, 3], [2, 3], [5]]
+      array.send(cmd,*params).should == [[1, 2, 3], [2, 3], [5]]
     end
   end
 end

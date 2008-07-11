@@ -54,7 +54,7 @@ describe "Array#sort" do
   end
 
   it "may leave the Array partially sorted if the sorting fails at any point" do
-    true.should == true   # Muhaha.
+    # needs to be implemented   
   end
 
   it "may take a block which is used to determine the order of objects a and b described as -1, 0 or +1" do
@@ -116,7 +116,7 @@ describe "Array#sort!" do
     a.sort! { -1 }.class.should == Array
   end
 
-  compliant_on :ruby, :jruby do
+  compliant_on :ruby, :jruby, :ir do
     it "raises a TypeError on a frozen array" do
       lambda { ArraySpecs.frozen_array.sort! }.should raise_error(TypeError)
     end

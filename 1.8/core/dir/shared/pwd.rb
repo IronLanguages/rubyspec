@@ -6,7 +6,12 @@ shared :dir_pwd do |cmd|
       
       # The following uses inode rather than file names to account for
       # case insensitive file systems like default OS/X file systems
-      File.stat(Dir.send(cmd)).ino.should == File.stat(`/bin/sh -c "pwd -P"`.chomp).ino
+      platform_is_not :windows do
+        File.stat(Dir.send(cmd)).ino.should == File.stat(`/bin/sh -c "pwd -P"`.chomp).ino
+      end
+      platform_is :windows do
+        File.stat(Dir.send(cmd)).ino.should == File.stat(File.expand_path(`cd`.chomp)).ino
+      end
     end
   end
 end

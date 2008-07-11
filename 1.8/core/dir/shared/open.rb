@@ -15,7 +15,7 @@ shared :dir_open do |cmd|
     end
 
     it "returns the value of the block if a block is given" do
-      Dir.open(DirSpecs.mock_dir) {|dir| :value }.should == :value
+      Dir.send(cmd, DirSpecs.mock_dir) {|dir| :value }.should == :value
     end
 
     it "closes the Dir instance when the block exits if given a block" do

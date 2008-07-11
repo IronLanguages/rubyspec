@@ -260,10 +260,10 @@ shared :array_slice do |cmd|
       a.send(cmd, 1..0).should == []
       a.send(cmd, 1...0).should == []
 
-      lambda { a.slice("a" .. "b") }.should raise_error(TypeError)
-      lambda { a.slice("a" ... "b") }.should raise_error(TypeError)
-      lambda { a.slice(from .. "b") }.should raise_error(TypeError)
-      lambda { a.slice(from ... "b") }.should raise_error(TypeError)
+      lambda { a.send(cmd, "a" .. "b") }.should raise_error(TypeError)
+      lambda { a.send(cmd, "a" ... "b") }.should raise_error(TypeError)
+      lambda { a.send(cmd, from .. "b") }.should raise_error(TypeError)
+      lambda { a.send(cmd,from ... "b") }.should raise_error(TypeError)
     end
 
     it "checks whether the Range elements respond to #to_int with [m..n] and [m...n]" do
