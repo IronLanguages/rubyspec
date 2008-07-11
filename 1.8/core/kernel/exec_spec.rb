@@ -6,11 +6,9 @@ describe "Kernel#exec" do
     Kernel.private_instance_methods.should include("exec")
   end
   
-  platform_is_not :windows do
-    it "raises a SystemCallError if cmd cannot execute" do
-      lambda { exec "" }.should raise_error(SystemCallError)
-    end  
-  end
+  it "raises a SystemCallError if cmd cannot execute" do
+    lambda { exec "" }.should raise_error(SystemCallError)
+  end  
 end
 
 describe "Kernel.exec" do
