@@ -20,12 +20,14 @@ describe "Thread.stop" do
 end
 
 describe "Thread#stop?" do
-  it "reports if a thread has stopped due to sleeping" do
-    t = Thread.new { Thread.stop }
-    Thread.pass until t.status == 'sleep'
-    t.stop?.should == true
-    t.run
-    t.join
-    t.stop?.should == true
+  ironruby_bug("bug 21157: Match MRI sleep / wakeup / run semantics in IronRuby") do
+    it "reports if a thread has stopped due to sleeping" do
+      t = Thread.new { Thread.stop }
+      Thread.pass until t.status == 'sleep'
+      t.stop?.should == true
+      t.run
+      t.join
+      t.stop?.should == true
+    end
   end
 end
