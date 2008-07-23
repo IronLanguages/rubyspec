@@ -8,11 +8,9 @@ describe "Thread#status" do
     t.status.should == false
   end
 
-  ironruby_bug("21171: Marshal exceptions thrown within thread blocks properly to calling thread") do
-    it "returns nil if thread terminates with exception" do
-      t = Thread.new { raise "test exception" }
-      lambda { t.join }.should raise_error(StandardError)
-      t.status.should == nil
-    end
+  it "returns nil if thread terminates with exception" do
+    t = Thread.new { raise "test exception" }
+    lambda { t.join }.should raise_error(StandardError)
+    t.status.should == nil
   end
 end

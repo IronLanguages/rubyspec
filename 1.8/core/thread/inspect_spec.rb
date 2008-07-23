@@ -7,25 +7,23 @@ describe "Thread#inspect" do
     t.value.should include('run')
   end
   
-  ironruby_bug("bug 21157: Match MRI sleep / wakeup / run semantics in IronRuby") do
-    it "describes a sleeping thread" do
-      c = Channel.new
-      t = Thread.new do      
-        sleep
-        c << Thread.current.inspect
-        sleep
-      end
-
-      Thread.pass until t.status == 'sleep'
-      t.inspect.should include('sleep')
-      t.run
-      c.receive.should include('run')
-      Thread.pass until t.status == 'sleep'
-      t.inspect.should include('sleep')
-      t.run
-      t.join
-      t.inspect.should include('dead')
+  it "describes a sleeping thread" do
+    c = Channel.new
+    t = Thread.new do      
+      sleep
+      c << Thread.current.inspect
+      sleep
     end
+
+    Thread.pass until t.status == 'sleep'
+    t.inspect.should include('sleep')
+    t.run
+    c.receive.should include('run')
+    Thread.pass until t.status == 'sleep'
+    t.inspect.should include('sleep')
+    t.run
+    t.join
+    t.inspect.should include('dead')
   end
 
   compliant_on(:ruby) do

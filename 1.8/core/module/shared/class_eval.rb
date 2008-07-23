@@ -5,6 +5,14 @@ shared :module_class_eval do |cmd|
       ModuleSpecs.send(cmd, "1 + 1").should == 2
     end
 
+    it "does not add defined methods to other classes" do
+      FalseClass.class_eval do
+        def foo
+          'foo'
+        end
+      end
+      lambda {42.foo}.should raise_error(NoMethodError)
+    end
     it "defines constants in the receiver's scope" do
       ModuleSpecs.send(cmd, "module NewEvaluatedModule;end")
       ModuleSpecs.const_defined?(:NewEvaluatedModule).should == true
