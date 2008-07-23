@@ -118,7 +118,8 @@ describe "String#to_i" do
     "777".to_i(obj).should == 0777
   end
   
-  it "requires that the sign if any appears before the base specifier" do
+  ironruby_bug("21158: Number parser not resiliant for where the negative sign appears") do
+    it "requires that the sign if any appears before the base specifier" do
     "0b-1".to_i( 2).should == 0
     "0d-1".to_i(10).should == 0
     "0o-1".to_i( 8).should == 0
@@ -128,6 +129,7 @@ describe "String#to_i" do
     "0o-1".to_i(8).should == 0
     "0d-1".to_i(10).should == 0
     "0x-1".to_i(16).should == 0
+    end
   end
   
   it "raises an ArgumentError for illegal bases (1, < 0 or > 36)" do
