@@ -14,8 +14,8 @@ describe "The '&&' statement" do
   end
   
   it "evalutes to the last condition if all are true" do
-    ("yes" && 1).should.equal 1
-    (1 && "yes").should.equal "yes"
+    ("yes" && 1).should == 1
+    (1 && "yes").should == "yes"
   end
   
   it "evaluates the full set of chained conditions during assignment" do
@@ -23,6 +23,12 @@ describe "The '&&' statement" do
     x = 1 && y = 2
     # "1 && y = 2" is evaluated and then assigned to x
     x.should == 2
+  end
+
+  it "treats empty expressions as nil" do
+    (() && true).should be_nil
+    (true && ()).should be_nil
+    (() && ()).should be_nil
   end
 
 end
@@ -40,8 +46,8 @@ describe "The 'and' statement" do
   end
   
   it "evalutes to the last condition if all are true" do
-    ("yes" and 1).should.equal 1
-    (1 and "yes").should.equal "yes"
+    ("yes" and 1).should == 1
+    (1 and "yes").should == "yes"
   end
   
   it "when used in assignment, evaluates and assigns expressions individually" do
@@ -50,5 +56,11 @@ describe "The 'and' statement" do
     # evaluates (x=1) and (y=2)
     x.should == 1
   end
-  
+
+  it "treats empty expressions as nil" do
+    (() and true).should be_nil
+    (true and ()).should be_nil
+    (() and ()).should be_nil
+  end
+
 end

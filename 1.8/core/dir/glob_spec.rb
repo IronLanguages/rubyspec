@@ -3,12 +3,22 @@ require File.dirname(__FILE__) + '/fixtures/common'
 require File.dirname(__FILE__) + '/shared/glob'
 
 describe "Dir.glob" do
-  it_behaves_like(:dir_glob, :glob)
-  
+  it_behaves_like :dir_glob, :glob
+end
+
+describe "Dir.glob" do
+  it_behaves_like :dir_glob_recursive, :[]
+end
+
+describe "Dir.glob" do
   before(:all) do
     @cwd = Dir.pwd
 
     Dir.chdir DirSpecs.mock_dir
+  end
+
+  after(:all) do
+    Dir.chdir @cwd
   end
 
   it "matches both dot and non-dotfiles with '*' and option File::FNM_DOTMATCH" do
@@ -58,9 +68,5 @@ describe "Dir.glob" do
         Dir.rmdir 'foo\?bar'
       end
     end
-  end
-
-  after(:all) do
-    Dir.chdir @cwd
   end
 end

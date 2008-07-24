@@ -117,9 +117,8 @@ end
 describe "Predefined global $+" do
   it "is equivalent to $~.captures.last" do
     /(f(o)o)/ =~ 'barfoobaz'
-    # causes a compiler exception as of 036b07375
-    # $+.should == $~.captures.last
-    # $+.should == 'o'
+    $+.should == $~.captures.last
+    $+.should == 'o'
   end
 end
 
@@ -375,10 +374,9 @@ describe "The predefined standard object nil" do
     nil.class.should == NilClass
   end
   
-  it "raises a SyntaxError if assigned to" do
-    # this needs to be tested with a subprocess because
-    # MRI aborts reading in the file
-  end
+  # this needs to be tested with a subprocess because
+  # MRI aborts reading in the file
+  it "raises a SyntaxError if assigned to"
 end
 
 describe "The predefined standard object true" do
@@ -386,10 +384,9 @@ describe "The predefined standard object true" do
     true.class.should == TrueClass
   end
   
-  it "raises a SyntaxError if assigned to" do
-    # this needs to be tested with a subprocess because
-    # MRI aborts reading in the file
-  end
+  # this needs to be tested with a subprocess because
+  # MRI aborts reading in the file
+  it "raises a SyntaxError if assigned to"
 end
 
 describe "The predefined standard object false" do
@@ -397,10 +394,9 @@ describe "The predefined standard object false" do
     false.class.should == FalseClass
   end
   
-  it "raises a SyntaxError if assigned to" do
-    # this needs to be tested with a subprocess because
-    # MRI aborts reading in the file
-  end
+  # this needs to be tested with a subprocess because
+  # MRI aborts reading in the file
+  it "raises a SyntaxError if assigned to"
 end
 
 =begin
@@ -417,6 +413,7 @@ NIL                  NilClass    Synonym for nil.
 RUBY_PLATFORM        String      The identifier of the platform running this program. This string 
                                  is in the same form as the platform identifier used by the GNU 
                                  configure utility (which is not a coincidence). 
+PLATFORM             String      Same as RUBY_PLATFORM.
 RUBY_RELEASE_DATE    String      The date of this release. 
 RUBY_VERSION         String      The version number of the interpreter. 
 STDERR               IO          The actual standard error stream for the program. The initial 
@@ -489,6 +486,11 @@ describe "The predefined global constants" do
   
   it "includes RUBY_PLATFORM" do
     Object.const_defined?(:RUBY_PLATFORM).should == true
+  end
+
+  it "includes PLATFORM" do
+    Object.const_defined?(:PLATFORM).should == true
+    RUBY_PLATFORM == PLATFORM
   end
 
   it "includes TOPLEVEL_BINDING" do
