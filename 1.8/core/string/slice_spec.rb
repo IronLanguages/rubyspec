@@ -3,7 +3,27 @@ require File.dirname(__FILE__) + '/fixtures/classes.rb'
 require File.dirname(__FILE__) + '/shared/slice.rb'
 
 describe "String#slice" do
-  it_behaves_like(:string_slice, :slice)
+  it_behaves_like :string_slice, :slice
+end
+
+describe "String#slice with index, length" do
+  it_behaves_like :string_slice_index_length, :slice
+end
+
+describe "String#slice with Range" do
+  it_behaves_like :string_slice_range, :slice
+end
+
+describe "String#slice with Regexp" do
+  it_behaves_like :string_slice_regexp, :slice
+end
+
+describe "String#slice with Regexp, index" do
+  it_behaves_like :string_slice_regexp_index, :slice
+end
+
+describe "String#slice with String" do
+  it_behaves_like :string_slice_string, :slice
 end
 
 describe "String#slice! with index" do
@@ -29,8 +49,8 @@ describe "String#slice! with index" do
     end
   
     it "doesn't raise a TypeError if self is frozen and idx is outside of self" do
-      "hello".freeze.slice!(10)
-      "".freeze.slice!(0)
+      "hello".freeze.slice!(10).should be_nil
+      "".freeze.slice!(0).should be_nil
     end
   end
   
@@ -91,12 +111,12 @@ describe "String#slice! with index, length" do
     end
   
     it "doesn't raise a TypeError if self is frozen but the given position is out of self" do
-      "hello".freeze.slice!(10, 3)
-      "hello".freeze.slice!(-10, 3)
+      "hello".freeze.slice!(10, 3).should be_nil
+      "hello".freeze.slice!(-10, 3).should be_nil
     end
 
     it "doesn't raise a TypeError if self is frozen but length is negative" do
-      "hello".freeze.slice!(4, -3)
+      "hello".freeze.slice!(4, -3).should be_nil
     end
   end
   

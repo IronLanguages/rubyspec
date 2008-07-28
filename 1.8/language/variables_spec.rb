@@ -15,6 +15,14 @@ describe "Basic assignment" do
     a = [*[1,2]];  a.should == [1, 2]
   end
 
+  it "assigns nil to lhs when rhs is an empty expression" do
+    a = ()
+    a.should be_nil
+
+    a = *()
+    a.should be_nil
+  end
+
   it "allows the assignment of the rhs to the lhs using the rhs splat operator" do
     a = *nil;      a.should == nil
     a = *1;        a.should == 1
@@ -627,7 +635,12 @@ describe "Operator assignment 'obj[idx] op= expr'" do
     (a[123] +=  2).should == 125
     (a[123] -=  2).should == 121
     (a[123] *=  2).should == 246
-    (a[123] /=  2).should == 61
+    # Guard against the Mathn library
+    # TODO: Make these specs not rely on specific behaviour / result values
+    # by using mocks.
+    conflicts_with :Prime do
+      (a[123] /=  2).should == 61
+    end
     (a[123] %=  2).should == 1
     (a[123] **= 2).should == 15129
     (a[123] |=  2).should == 123
@@ -661,6 +674,9 @@ describe "Single assignment" do
   it "If rhs has multiple arguments, lhs becomes an Array of them" do
     a = 1, 2, 3
     a.should == [1, 2, 3]
+
+    a = 1, (), 3
+    a.should == [1, nil, 3]
   end
 end
 
@@ -837,5 +853,42 @@ describe "Multiple assignment, array-style" do
       g.should == 8
       h.should == nil
     end
+  end
+end
+
+describe "Scope of variables" do
+  it "instance variables not overwritten by local variable in each block" do
+    
+    class ScopeVariables
+      attr_accessor :v
+
+      def initialize
+        @v = ['a', 'b', 'c']
+      end
+
+      def check_access
+        v.should == ['a', 'b', 'c']
+        self.v.should == ['a', 'b', 'c']
+      end
+      
+      def check_local_variable
+        v = nil
+        self.v.should == ['a', 'b', 'c']
+      end
+      
+      def check_each_block
+        self.v.each { |v|
+          # Don't actually do anything
+        }
+        self.v.should == ['a', 'b', 'c']
+        v.should == ['a', 'b', 'c']
+        self.v.object_id.should == v.object_id
+      end
+    end # Class ScopeVariables
+    
+    instance = ScopeVariables.new()
+    instance.check_access
+    instance.check_local_variable
+    instance.check_each_block
   end
 end

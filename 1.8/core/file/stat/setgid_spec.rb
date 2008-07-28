@@ -3,10 +3,9 @@ require File.dirname(__FILE__) + '/../../../shared/file/setgid'
 require File.dirname(__FILE__) + '/fixtures/classes'
 
 describe "File::Stat#setgid?" do
-  it_behaves_like :file_setgid, :setgid?, FileStat, "File::Stat#setgid?"
+  it_behaves_like :file_setgid, :setgid?, FileStat
 end
 
 describe "File::Stat#setgid?" do
-  it "needs to be reviewed for spec completeness" do
-  end
+  it "needs to be reviewed for spec completeness"
 end

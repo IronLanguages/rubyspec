@@ -8,7 +8,12 @@ describe "UDPSocket.send" do
       @server = UDPSocket.open
       @server.bind(nil, SocketSpecs.port)
       @ready = true
-      @msg = @server.recvfrom(64)
+      begin
+        @msg = @server.recvfrom_nonblock(64)
+      rescue Errno::EAGAIN
+        IO.select([@server])
+        retry
+      end
       @server.close
     end
     Thread.pass while @server_thread.status and !@ready
@@ -16,7 +21,7 @@ describe "UDPSocket.send" do
   
   it "sends data in ad hoc mode" do
     @socket = UDPSocket.open
-    @socket.send("ad hoc", 0, 'localhost',SocketSpecs.port)
+    @socket.send("ad hoc", 0, SocketSpecs.hostname,SocketSpecs.port)
     @socket.close
     @server_thread.join
       
@@ -28,7 +33,7 @@ describe "UDPSocket.send" do
 
   it "sends data in connection mode" do
     @socket = UDPSocket.open
-    @socket.connect('localhost',SocketSpecs.port)
+    @socket.connect(SocketSpecs.hostname,SocketSpecs.port)
     @socket.send("connection-based", 0)
     @socket.close
     @server_thread.join

@@ -93,6 +93,14 @@ describe "An instance method with a default argument" do
     foo(2).should == 2
   end
 
+  it "evaluates the default empty expression when no arguments are passed" do
+    def foo(a = ())
+      a
+    end
+    foo.should == nil
+    foo(2).should == 2
+  end
+
   it "assigns an empty Array to an unused splat argument" do
     def foo(a = 1, *b)
       [a,b]
@@ -452,7 +460,7 @@ describe "a method definition that sets more than one default parameter all to t
   it "assigns the parameters different objects across different default calls" do
     a, b, c = foo
     d, e, f = foo
-    a.should_not eql(d)
+    a.should_not equal(d)
   end
 
   it "only allows overriding the default value of the first such parameter in each set" do

@@ -1,5 +1,7 @@
 unless ENV['MSPEC_RUNNER']
   begin
+    require "pp"
+    require 'mspec/version'
     require 'mspec/helpers'
     require 'mspec/guards'
     require 'mspec/runner/shared'
@@ -7,6 +9,9 @@ unless ENV['MSPEC_RUNNER']
     require 'mspec/matchers/output'
     require 'mspec/matchers/output_to_fd'
     require 'mspec/matchers/complain'
+    require 'mspec/matchers/equal_element'
+    require 'mspec/matchers/equal_utf16'
+    require 'mspec/matchers/match_yaml'
 
     # Code to setup HOME directory correctly on Windows
     # This duplicates Ruby 1.9 semantics for defining HOME
@@ -34,12 +39,14 @@ unless ENV['MSPEC_RUNNER']
   end
 end
 
-unless ENV['OUTPUT_WARNINGS']
-  $verbose = $VERBOSE
-  $VERBOSE = nil
-
-  at_exit { $VERBOSE = $verbose }
+v = MSpec::VERSION.split('.').collect { |d| "1%02d" % d.to_i }.join.to_i
+unless v >= 101104100
+	puts MSpec::VERSION
+  puts "Please install MSpec version >= 1.4.0 to run the specs"
+  exit 1
 end
+
+$VERBOSE = nil unless ENV['OUTPUT_WARNINGS']
 
 def has_tty?
   if STDOUT.tty? then

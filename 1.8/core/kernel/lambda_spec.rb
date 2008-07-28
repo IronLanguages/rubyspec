@@ -6,11 +6,10 @@ describe "Kernel.lambda" do
   it "is a private method" do
     Kernel.private_instance_methods.should include("lambda")
   end
-  
+
   it_behaves_like(:kernel_lambda, :lambda)
 end
 
 describe "Kernel#lambda" do
-  it "needs to be reviewed for spec completeness" do
-  end
+  it "needs to be reviewed for spec completeness"
 end
