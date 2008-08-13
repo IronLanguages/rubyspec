@@ -2,7 +2,9 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 require 'fileutils'
 
 $require_fixture_dir = (File.dirname(__FILE__) + '/../../fixtures/require')
+$require_tmp_dir = tmp("require_specs")
 $LOAD_PATH << $require_fixture_dir
+$LOAD_PATH << $require_tmp_dir
 
 $require_spec   = nil
 $require_spec_1 = nil
@@ -31,11 +33,15 @@ describe "Kernel#require" do
 
   # Avoid storing .rbc in repo
   before :all do
-    Dir.chdir($require_fixture_dir) {
-      FileUtils.rm_f(Dir["*.rbc"])
+    Dir.mkdir($require_tmp_dir)
+    Dir.chdir($require_tmp_dir) { 
       FileUtils.touch("require_spec_dummy.#{Config::CONFIG['DLEXT']}")
       FileUtils.touch("require_spec_dummy.rb")
     }
+  end
+
+  after :all do
+    FileUtils.rm_rf($require_tmp_dir)
   end
 
   # The files used below just contain code that assigns
