@@ -2,9 +2,11 @@ describe :file_zero, :shared => true do
   before :each do
     @zero_file    = 'test.txt'
     @nonzero_file = 'test2.txt'
+    @dir = "test_dir"
 
     File.open(@zero_file, "w") {} # Touch
     File.open(@nonzero_file, "w") { |f| f.puts "hello" }
+    Dir.mkdir @dir
   end
 
   after :each do
@@ -48,6 +50,20 @@ describe :file_zero, :shared => true do
       File.open(file,'w') { @object.send(@method, file).should == true }
     ensure
       File.delete(file) rescue nil
+    end
+  end
+
+  platform_is_not :windows do
+    it "zero? returns false for a directory" do
+      lambda { @object.send(@method, @dir) }.should == false
+    end
+  end
+
+  platform_is :windows do
+    ruby_bug("redmine #449", "1.8.6") do
+      it "zero? returns false for a directory" do
+        @object.send(@method, @dir).should == false
+      end
     end
   end
 end
