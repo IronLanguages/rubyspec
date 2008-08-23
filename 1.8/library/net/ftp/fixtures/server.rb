@@ -128,8 +128,29 @@ module NetFTPSpecs
       self.response("226 transfer complete (LIST #{folder})")
     end
     
+    def mdtm(filename)
+      self.response("213 19980705132316")
+    end
+    
+    def mkd(foldername)
+      self.response(%Q{257 "#{foldername.gsub('"', '""')}" created.})
+    end
+    
+    def nlst(folder = nil)
+      self.response("150 opening ASCII connection for file list")
+      @datasocket.puts("last_response_code.rb")
+      @datasocket.puts("list.rb")
+      @datasocket.puts("pwd.rb")
+      @datasocket.close()
+      self.response("226 transfer complete (NLST#{folder ? " #{folder}" : ""})")
+    end
+    
     def noop
       self.response("200 Command okay. (NOOP)")
+    end
+    
+    def pass(password)
+      self.response("230 User logged in, proceed. (PASS #{password})")
     end
     
     def port(arg)
@@ -140,6 +161,10 @@ module NetFTPSpecs
       
       @datasocket = TCPSocket.new(host, port)
       self.response("200 port opened")
+    end
+    
+    def pwd
+      self.response('257 "/some/dir/" - current directory')
     end
     
     def retr(file)
@@ -160,16 +185,53 @@ module NetFTPSpecs
       self.response("350 Requested file action pending further information. (REST)")
     end
     
+    def rmd(folder)
+      self.response("250 Requested file action okay, completed. (RMD #{folder})")
+    end
+    
+    def rnfr(from)
+      @rename_from = from
+      self.response("350 Requested file action pending further information.")
+    end
+    
+    def rnto(to)
+      self.response("250 Requested file action okay, completed. (Renamed #{@rename_from} to #{to})")
+      @rename_from = nil
+    end
+    
     def site(param)
       self.response("200 Command okay. (SITE #{param})")
     end
     
     def size(filename)
-      self.response("213 1024")
+      if filename == "binary"
+        self.response("213 24")
+      else
+        self.response("213 1024")
+      end
     end
     
     def stat
       self.response("211 System status, or system help reply. (STAT)")
+    end
+    
+    def stor(file)
+      tmp_file = tmp("#{file}file")
+      
+      self.response("125 Data transfer starting.")
+
+      mode = @restart_at ? "a" : "w"
+
+      File.open(tmp_file, mode) do |f|
+        loop do
+          data = @datasocket.recv(1024)
+          break if !data || data.empty?
+          f << data
+        end
+      end
+
+      #@datasocket.close()
+      self.response("200 OK, Data received. (STOR #{file})")
     end
     
     def syst
