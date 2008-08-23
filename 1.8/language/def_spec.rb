@@ -11,16 +11,18 @@ describe "Redefining a method" do
   end
 end
 
-describe "An instance method definition" do
-  it "for 'initialize' mothod defines it as private" do
+describe "Defining an 'initialize' method" do
+  it "should make it private" do
     class DefInitializeSpec
       def initialize
       end
     end
     DefInitializeSpec.new.private_methods(false).should include('initialize')
   end
+end
 
-  it "for 'initialize_copy' method defines it as private" do
+describe "Defining an 'initialize_copy' method" do
+  it "should make it private" do
     class DefInitializeCopySpec
       def initialize_copy
       end
@@ -90,6 +92,14 @@ describe "An instance method with a default argument" do
       a
     end
     foo.should == 1
+    foo(2).should == 2
+  end
+
+  it "evaluates the default empty expression when no arguments are passed" do
+    def foo(a = ())
+      a
+    end
+    foo.should == nil
     foo(2).should == 2
   end
 
@@ -452,7 +462,7 @@ describe "a method definition that sets more than one default parameter all to t
   it "assigns the parameters different objects across different default calls" do
     a, b, c = foo
     d, e, f = foo
-    a.should_not eql(d)
+    a.should_not equal(d)
   end
 
   it "only allows overriding the default value of the first such parameter in each set" do

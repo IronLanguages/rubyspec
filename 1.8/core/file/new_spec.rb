@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe "File.new" do
   before :each do
-    @file = 'test.txt'
+    @file = tmp('test.txt')
     @fh = nil
     @flags = File::CREAT | File::TRUNC | File::WRONLY
     File.open(@file, "w") {} # touch
@@ -68,10 +68,17 @@ describe "File.new" do
   end
 
   it "return a new File with modus fd " do
-    @fh = File.new(@file)
-    @fh = File.new(@fh.fileno)
-    @fh.class.should == File
-    File.exists?(@file).should == true
+    begin
+      @fh_orig = File.new(@file)
+      @fh = File.new(@fh_orig.fileno)
+      @fh.class.should == File
+      File.exists?(@file).should == true
+    ensure
+      @fh.close rescue nil if @fh
+      @fh = nil
+      @fh_orig.close rescue nil if @fh_orig
+      @fh_orig = nil
+    end
   end
 
   it "create a new file when use File::EXCL mode " do
@@ -112,14 +119,10 @@ describe "File.new" do
   end
 
   it "coerces filename using to_str" do
-    f = Object.new
-    def f.to_str; __FILE__; end
-
-    begin
-      file = File.new(f)
-    ensure
-      file.close if file
-    end
+    name = mock("file")
+    name.should_receive(:to_str).and_return(@file)
+    File.new(name, "w") { }
+    File.exists?(@file).should == true
   end
 
   specify  "expected errors " do

@@ -24,10 +24,19 @@ describe "Array#unshift" do
     a.unshift(3, 4)
     a.should == [3, 4]
   end
-  
+
   it "quietly ignores unshifting nothing" do
     [].unshift().should == []
     [].unshift(*[]).should == []
+  end
+
+  it "properly handles recursive arrays" do
+    empty = ArraySpecs.empty_recursive_array
+    empty.unshift(:new).should == [:new, empty]
+
+    array = ArraySpecs.recursive_array
+    array.unshift(:new)
+    array[0..5].should == [:new, 1, 'two', 3.0, array, array]
   end
 
   compliant_on :ruby, :jruby, :ir do
@@ -36,7 +45,7 @@ describe "Array#unshift" do
     end  
     
     it "does not raise TypeError on a frozen array if no modification takes place" do
-      ArraySpecs.frozen_array.unshift() # ok
+      ArraySpecs.frozen_array.unshift.should == [1, 2, 3]
     end
   end
 end

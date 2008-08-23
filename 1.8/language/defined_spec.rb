@@ -26,7 +26,7 @@ describe "The defined? keyword" do
     end
   end
 
-  module A
+  module AAA
     self::FOO = 'x' unless defined? self::FOO rescue nil
   end
   
@@ -123,8 +123,8 @@ describe "The defined? keyword" do
     ret.should == "constant"
   end
 
-  it "returns 'constant' when evaluating self::FOO in module A" do
-    ret = defined?(A::FOO)
+  it "returns 'constant' when evaluating self::FOO in module AAA" do
+    ret = defined?(AAA::FOO)
     ret.should == 'constant'
   end
 

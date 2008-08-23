@@ -2,7 +2,9 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 require 'fileutils'
 
 $require_fixture_dir = (File.dirname(__FILE__) + '/../../fixtures/require')
+$require_tmp_dir = tmp("require_specs")
 $LOAD_PATH << $require_fixture_dir
+$LOAD_PATH << $require_tmp_dir
 
 $require_spec   = nil
 $require_spec_1 = nil
@@ -31,11 +33,15 @@ describe "Kernel#require" do
 
   # Avoid storing .rbc in repo
   before :all do
-    Dir.chdir($require_fixture_dir) {
-      FileUtils.rm_f(Dir["*.rbc"])
+    Dir.mkdir($require_tmp_dir)
+    Dir.chdir($require_tmp_dir) { 
       FileUtils.touch("require_spec_dummy.#{Config::CONFIG['DLEXT']}")
       FileUtils.touch("require_spec_dummy.rb")
     }
+  end
+
+  after :all do
+    FileUtils.rm_rf($require_tmp_dir)
   end
 
   # The files used below just contain code that assigns
@@ -73,9 +79,9 @@ describe "Kernel#require" do
     $require_spec_2.nil?.should == false
   end
 
-  it "loads extension files" do
-    # TODO: Not sure how to spec this yet since it needs an extfile
-  end
+  # TODO: add an implementation-agnostic method for creating
+  # an extension file
+  it "loads extension files"
 
   it "does not expand/resolve qualified files against $LOAD_PATH" do
     num_features = $LOADED_FEATURES.size
@@ -137,9 +143,9 @@ describe "Kernel#require" do
     require('require_spec_dummy').should == false
   end
 
-  it "will load explicit file.<ext> even if file.rb already loaded and vice versa" do
-    # Not sure how to spec this yet because it needs an extfile. 
-  end
+  # TODO: add an implementation-agnostic method for creating
+  # an extension file
+  it "will load explicit file.<ext> even if file.rb already loaded and vice versa"
 
   it "appends any non-ruby extensioned file with .rb/.<ext> in that order to locate file" do
     load('require_spec.rooby')
@@ -281,6 +287,5 @@ describe "Shell expansion in Kernel#require" do
 end
 
 describe "Kernel.require" do
-  it "needs to be reviewed for spec completeness" do
-  end
+  it "needs to be reviewed for spec completeness"
 end

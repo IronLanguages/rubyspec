@@ -6,6 +6,14 @@ describe "Array#uniq" do
     ["a", "a", "b", "b", "c"].uniq.should == ["a", "b", "c"]
   end
 
+  it "properly handles recursive arrays" do
+    empty = ArraySpecs.empty_recursive_array
+    empty.uniq.should == [empty]
+
+    array = ArraySpecs.recursive_array
+    array.uniq.should == [1, 'two', 3.0, array]
+  end
+
   it "uses eql? semantics" do
     [1.0, 1].uniq.should == [1.0, 1]
   end
@@ -17,7 +25,7 @@ describe "Array#uniq" do
     y = mock('0')
     def y.hash() 0 end
   
-    [x, y].uniq
+    [x, y].uniq.should == [x, y]
   end
   
   it "does not compare elements with different hash codes via eql?" do
@@ -86,7 +94,19 @@ describe "Array#uniq!" do
     a = [ "a", "a", "b", "b", "c" ]
     a.should equal(a.uniq!)
   end
-  
+
+  it "properly handles recursive arrays" do
+    empty = ArraySpecs.empty_recursive_array
+    empty_dup = empty.dup
+    empty.uniq!
+    empty.should == empty_dup
+
+    array = ArraySpecs.recursive_array
+    expected = array[0..3]
+    array.uniq!
+    array.should == expected
+  end
+
   it "returns nil if no changes are made to the array" do
     [ "a", "b", "c" ].uniq!.should == nil
   end
@@ -99,7 +119,7 @@ describe "Array#uniq!" do
     end
 
     it "does not raise TypeError on a frozen array if no modification takes place" do
-      ArraySpecs.frozen_array.uniq! # ok, already uniq
+      ArraySpecs.frozen_array.uniq!.should be_nil
     end
   end
 end

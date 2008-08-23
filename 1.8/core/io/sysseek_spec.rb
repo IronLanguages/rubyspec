@@ -4,7 +4,7 @@ require File.dirname(__FILE__) + '/fixtures/classes'
 describe "IO#sysseek on a file" do
   # TODO: This should be made more generic with seek spec
   before :each do
-    @file = File.open(File.dirname(__FILE__) + '/fixtures/readlines.txt', 'r+')
+    @file = File.open(File.dirname(__FILE__) + '/fixtures/readlines.txt', 'r')
     @io = IO.open @file.fileno, 'r'
   end
 
@@ -27,7 +27,7 @@ describe "IO#sysseek on a file" do
   it "warns if called immediately after a buffered IO#write" do
     begin
       # copy contents to a separate file
-      tmpfile = File.open("/tmp/tmp_IO_sysseek", "w")
+      tmpfile = File.open(tmp("tmp_IO_sysseek"), "w")
       tmpfile.write(@file.read)
       tmpfile.seek(0, File::SEEK_SET)
 
@@ -45,10 +45,16 @@ describe "IO#sysseek on a file" do
   end
 
   it "moves the read position relative to the end with SEEK_END" do
-    @io.sysseek(0, IO::SEEK_END)
-    @io.tell.should == 134
+    @io.sysseek(1, IO::SEEK_END)
+
+    # this is the safest way of checking the EOF when
+    # sys-* methods are invoked
+    lambda {
+      @io.sysread(1)
+    }.should raise_error(EOFError)
+
     @io.sysseek(-25, IO::SEEK_END)
-    @io.readline.should == "cinco.\n"
+    @io.sysread(7).should == "cinco.\n"
   end
 
   it "can handle any numerical argument without breaking and can seek past EOF" do
