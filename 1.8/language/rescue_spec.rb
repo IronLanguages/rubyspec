@@ -40,8 +40,7 @@ describe "The rescue keyword" do
     caught_it = false
     begin
       raise SpecificExampleException, "not important"
-   # disabled due to IronRuby bug 21258
-   # rescue *exception_list
+    rescue *exception_list
       caught_it = true
     end
     caught_it.should be_true
@@ -50,8 +49,7 @@ describe "The rescue keyword" do
       [lambda{1/0}, lambda{raise SpecificExampleException}].each do |block|
         begin
           block.call
-       # disabled due to IronRuby bug 21258
-       # rescue *exception_list
+        rescue *exception_list
           caught << $!
         end
       end
@@ -66,8 +64,7 @@ describe "The rescue keyword" do
     lambda do
       begin
         raise OtherCustomException, "not rescued!"
-      # disabled due to IronRuby bug 21258
-      #rescue *exception_list
+      rescue *exception_list
       end
     end.should raise_error(OtherCustomException)
   end
