@@ -192,7 +192,7 @@ describe :dir_glob, :shared => true do
     Dir.mkdir 'foo^bar'
 
     begin
-      Dir.glob('foo?bar').should == %w|foo*bar|
+      Dir.glob('foo?bar').should == %w|foo^bar|
       Dir.glob('foo\?bar').should == []
       Dir.glob('nond\otfile').should == %w|nondotfile|
     ensure

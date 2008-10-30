@@ -103,6 +103,20 @@ describe "Kernel#require" do
     $LOAD_PATH.delete name
   end
 
+  it "loads a file with ./filename even if . is not in path" do
+    Dir.chdir($require_fixture_dir) do |dir| 
+	 path_backup = $LOAD_PATH.clone
+	 $LOAD_PATH.clear
+	 $LOAD_PATH << "Someirrelevantpath"
+     begin
+      require('./require_spec.rb').should == true    
+     ensure
+	  $LOAD_PATH.clear
+	  $LOAD_PATH.concat(path_backup)    
+	 end 
+	end
+  end
+  
   it "appends a file with no extension with .rb/.<ext> in that order to locate file" do
     load('require_spec')
     $require_spec.should == :noext

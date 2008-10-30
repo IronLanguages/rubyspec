@@ -12,11 +12,11 @@ describe "Dir.chdir" do
   
   it "defaults to $HOME with no arguments" do
     if ENV['HOME']
-      Dir.chdir(ENV['HOME'])
-      home = Dir.pwd
+    Dir.chdir(ENV['HOME'])
+    home = Dir.pwd
 
-      Dir.chdir
-      Dir.pwd.should == home
+    Dir.chdir
+    Dir.pwd.should == home
     end
   end
   
