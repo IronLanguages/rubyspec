@@ -153,13 +153,6 @@ describe "Predefined global $stdout" do
     $stdout = @old_stdout
   end
 
-  it "is the same as $defout" do
-    $stdout.should == $defout
-
-    $stdout = IOStub.new
-    $stdout.should == $defout
-  end
-
   it "is the same as $DEFAULT_OUTPUT from 'English' library" do
     require 'English'
     $stdout.should == $DEFAULT_OUTPUT
@@ -497,16 +490,11 @@ describe "The predefined global constants" do
     Object.const_defined?(:RUBY_PLATFORM).should == true
   end
 
-  it "includes PLATFORM" do
-    Object.const_defined?(:PLATFORM).should == true
-    RUBY_PLATFORM == PLATFORM
+  it "does not include PLATFORM (obsolete)" do
+    Object.const_defined?(:PLATFORM).should_not == true
   end
 
   it "includes TOPLEVEL_BINDING" do
     Object.const_defined?(:TOPLEVEL_BINDING).should == true
-  end
-
-  it "includes RUBY_ENGINE" do
-    Object.const_defined?(:RUBY_ENGINE).should == true
   end
 end
