@@ -73,17 +73,10 @@ describe "BigDecimal#remainder" do
   end
   
   it "coerces arguments to BigDecimal if possible" do
-<<<<<<< HEAD:1.8/library/bigdecimal/remainder_spec.rb
-  	 @one.remainder(2).should == @one
-  end
-   
-  
-=======
     @one.remainder(2).should == @one
   end
 
 
->>>>>>> 6502a0827b0b411ddd45e55faba0b86f017196fb:1.8/library/bigdecimal/remainder_spec.rb
   it "raises TypeError if the argument cannot be coerced to BigDecimal" do
     lambda {
       @one.remainder('2')
