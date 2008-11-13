@@ -2,11 +2,9 @@ describe :file_zero, :shared => true do
   before :each do
     @zero_file    = 'test.txt'
     @nonzero_file = 'test2.txt'
-    @dir = "test_dir"
 
     File.open(@zero_file, "w") {} # Touch
     File.open(@nonzero_file, "w") { |f| f.puts "hello" }
-    Dir.mkdir @dir
   end
 
   after :each do

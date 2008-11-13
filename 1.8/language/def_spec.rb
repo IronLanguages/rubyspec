@@ -181,6 +181,7 @@ describe "A singleton method definition" do
     end
     DefSpec.foo.should == nil
   end
+
   it "can be redefined" do
     obj = Object.new
     def obj.==(other)

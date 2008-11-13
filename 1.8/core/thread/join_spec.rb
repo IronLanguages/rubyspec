@@ -36,7 +36,7 @@ describe "Thread#join" do
   end
   
   it "raises any exceptions encountered in the thread body" do
-    t = Thread.new { raise NotImplementedError.new("test exception") }
+    t = Thread.new { raise NotImplementedError.new("Just kidding") }
     lambda { t.join }.should raise_error(NotImplementedError)
   end
 end

@@ -16,7 +16,6 @@ describe "Array#push" do
     a.push("foo")
     a.should == ["b", "c", "foo"]
   end
-  
 
   it "properly handles recursive arrays" do
     empty = ArraySpecs.empty_recursive_array

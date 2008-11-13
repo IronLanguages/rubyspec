@@ -16,7 +16,7 @@ describe "The rescue keyword" do
       end
     end.should_not raise_error
   end
-
+  
   it "can capture the raised exception in a local variable" do
     begin
       raise SpecificExampleException, "some text"
@@ -24,7 +24,7 @@ describe "The rescue keyword" do
       e.message.should == "some text"
     end
   end
-
+  
   it "can rescue multiple raised exceptions with a single rescue block" do
     lambda do
       [lambda{1/0}, lambda{raise SpecificExampleException}].each do |block|
@@ -35,7 +35,7 @@ describe "The rescue keyword" do
       end
     end.should_not raise_error
   end
-
+  
   it "can rescue a splatted list of exceptions" do
     caught_it = false
     begin
@@ -53,13 +53,13 @@ describe "The rescue keyword" do
           caught << $!
         end
       end
-    end.should_not raise_error
+    end.should_not raise_error    
     caught.size.should == 2
     exception_list.each do |exception_class|
       caught.map{|e| e.class}.include?(exception_class).should be_true
     end
   end
-
+  
   it "will only rescue the specified exceptions when doing a splat rescue" do
     lambda do
       begin
@@ -68,5 +68,5 @@ describe "The rescue keyword" do
       end
     end.should raise_error(OtherCustomException)
   end
-
+  
 end

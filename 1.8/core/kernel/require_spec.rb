@@ -1,5 +1,4 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
-require 'fileutils'
 
 $require_fixture_dir = (File.dirname(__FILE__) + '/../../fixtures/require')
 $require_tmp_dir = tmp("require_specs")

@@ -9,7 +9,7 @@ describe "Thread#status" do
   end
 
   it "returns nil if thread terminates with exception" do
-    t = Thread.new { raise "test exception" }
+    t = Thread.new { raise "death to the unbelievers" }
     lambda { t.join }.should raise_error(StandardError)
     t.status.should == nil
   end

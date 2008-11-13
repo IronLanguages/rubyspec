@@ -14,7 +14,7 @@ describe "Thread#inspect" do
       c << Thread.current.inspect
       sleep
     end
-
+    
     Thread.pass until t.status == 'sleep'
     t.inspect.should include('sleep')
     t.run

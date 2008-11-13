@@ -505,8 +505,4 @@ describe "The predefined global constants" do
   it "includes TOPLEVEL_BINDING" do
     Object.const_defined?(:TOPLEVEL_BINDING).should == true
   end
-
-  it "includes RUBY_ENGINE" do
-    Object.const_defined?(:RUBY_ENGINE).should == true
-  end
 end
